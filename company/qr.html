@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Noma — QR Menü</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#0d0b09;--paper:#f3ece2;--muted:#b9a99b;--accent:#a97d61;--line:rgba(243,236,226,.16)}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 80% 10%,#2b1e17 0,#0d0b09 42%);color:var(--paper);font-family:"DM Sans",sans-serif;display:grid;place-items:center;padding:24px}.wrap{width:min(430px,100%);text-align:center}.brand{width:min(250px,75%);margin:0 auto 34px}.brand img{width:100%;display:block}.kicker{color:var(--accent);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 15px}.wrap h1{font:500 clamp(38px,10vw,58px)/.98 "Playfair Display",serif;letter-spacing:-.05em;margin:0 auto 18px;max-width:360px}.intro{color:var(--muted);font-size:14px;line-height:1.6;max-width:300px;margin:0 auto 30px}.qr-shell{background:var(--paper);padding:18px;width:256px;margin:0 auto 25px;box-shadow:0 26px 80px rgba(0,0,0,.35);transform:rotate(-1.5deg)}#qrcode{position:relative;background:#fff;padding:8px}#qrcode canvas,#qrcode img:not(.mark){width:100%!important;height:100%!important;display:block}.mark{position:absolute;width:26%;height:26%;object-fit:contain;left:37%;top:37%;padding:5px;background:var(--paper);z-index:2}.scan{color:#5c493d;font-size:11px;margin:13px 0 0}.open{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:14px 24px;font-weight:600;font-size:13px;text-decoration:none;transition:.2s ease}.open:hover{background:#c0967c;transform:translateY(-2px)}.note{color:var(--muted);font-size:11px;margin:20px 0 0}.note span{color:var(--paper)}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="brand"><img src="logpng.png" alt="Noma Coffee and More"></div>
+    <p class="kicker">Noma coffee and more</p>
+    <h1>Menüye hoş geldin.</h1>
+    <p class="intro">Kameranı QR koduna tut. Kahveni, soğuk içeceğini ya da tatlı eşlikçini seç.</p>
+    <div class="qr-shell"><div id="qrcode" aria-label="Noma menüsünü açan QR kod"><img class="mark" src="logpng.png" alt=""></div><p class="scan">Telefon kameranla okut</p></div>
+    <a class="open" href="qr-menu.html">Menüyü şimdi aç</a>
+    <p class="note">Demo menü · <span>fiyatlar örnektir</span></p>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const menuUrl = new URL('qr-menu.html', window.location.href).href;
+    new QRCode(document.getElementById('qrcode'), {text:menuUrl,width:210,height:210,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+  </script>
+</body>
+</html>

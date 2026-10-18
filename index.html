@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0c0b0a" />
+  <title>Noma — Coffee and more</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0c0b0a;
+      --surface: #171310;
+      --surface-2: #211a16;
+      --paper: #f3ece2;
+      --muted: #b9a99b;
+      --accent: #a97d61;
+      --accent-soft: #d6b39a;
+      --line: rgba(243, 236, 226, .14);
+      --shadow: 0 24px 80px rgba(0, 0, 0, .28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--paper);
+      background: var(--ink);
+      font-family: "DM Sans", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 4px; }
+
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 0 18px; border-bottom: 1px solid var(--line);
+    }
+    .mini-brand { display: flex; align-items: center; gap: 12px; }
+    .mini-brand img { width: 132px; height: auto; display: block; }
+    .location { color: var(--muted); font-size: 12px; letter-spacing: .04em; }
+    .top-action {
+      border: 1px solid var(--line); color: var(--paper); background: transparent;
+      border-radius: 999px; padding: 10px 16px; font-size: 12px;
+    }
+    .top-action:hover { border-color: var(--accent); color: var(--accent-soft); }
+
+    .hero {
+      min-height: 430px; display: grid; grid-template-columns: 1.15fr .85fr;
+      align-items: center; gap: 40px; padding: 74px 0 70px;
+    }
+    .eyebrow { color: var(--accent-soft); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; margin: 0 0 20px; }
+    h1 { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: clamp(44px, 7vw, 84px); line-height: .98; letter-spacing: -.045em; margin: 0; max-width: 680px; }
+    .hero-copy { color: var(--muted); max-width: 430px; margin: 24px 0 0; line-height: 1.65; font-size: 15px; }
+    .hero-note { display: flex; align-items: center; gap: 10px; margin-top: 28px; color: var(--accent-soft); font-size: 12px; }
+    .hero-note::before { content: ""; width: 36px; height: 1px; background: var(--accent); }
+
+    .qr-card {
+      justify-self: end; width: min(300px, 100%); padding: 18px; background: var(--surface);
+      border: 1px solid var(--line); box-shadow: var(--shadow); transform: rotate(2deg);
+    }
+    .qr-inner { padding: 18px; background: var(--paper); color: var(--ink); text-align: center; }
+    .qr-code { position: relative; display: grid; place-items: center; aspect-ratio: 1; padding: 10px; background: #fff; overflow: hidden; }
+    .qr-code canvas, .qr-code img:not(.qr-logo) { width: 100% !important; height: 100% !important; display: block; }
+    .qr-logo { position: absolute; width: 28%; height: 28%; object-fit: contain; inset: 36%; background: var(--paper); padding: 6px; z-index: 2; }
+    .qr-label { margin: 16px 0 4px; font-family: "Playfair Display", Georgia, serif; font-size: 22px; }
+    .qr-sub { margin: 0; font-size: 11px; color: #78675c; }
+
+    .menu-wrap { padding: 34px 0 100px; border-top: 1px solid var(--line); }
+    .menu-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
+    h2 { font-family: "Playfair Display", Georgia, serif; font-size: clamp(32px, 5vw, 50px); font-weight: 500; letter-spacing: -.035em; margin: 0; }
+    .menu-heading p { color: var(--muted); margin: 0 0 3px; font-size: 13px; }
+    .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 28px; scrollbar-width: none; }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter { border: 1px solid var(--line); color: var(--muted); background: transparent; border-radius: 999px; padding: 10px 16px; white-space: nowrap; font-size: 12px; transition: .2s ease; }
+    .filter:hover, .filter.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .product { background: var(--surface); border: 1px solid var(--line); min-height: 330px; display: flex; flex-direction: column; transition: transform .2s ease, border-color .2s ease; }
+    .product:hover { transform: translateY(-4px); border-color: rgba(214, 179, 154, .52); }
+    .product-image { height: 188px; position: relative; overflow: hidden; background: #2b211b; }
+    .product-image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(140deg, rgba(255,255,255,.16), transparent 50%, rgba(0,0,0,.45)); }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; display: block; mix-blend-mode: screen; opacity: .82; }
+    .product:nth-child(2) .product-image { background: #543c31; }
+    .product:nth-child(3) .product-image { background: #2d4037; }
+    .product:nth-child(4) .product-image { background: #5c3c32; }
+    .product:nth-child(5) .product-image { background: #8a6a4e; }
+    .product:nth-child(6) .product-image { background: #40312d; }
+    .product-info { display: flex; flex: 1; flex-direction: column; padding: 18px; }
+    .product-type { color: var(--accent-soft); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+    .product h3 { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 23px; margin: 0 0 8px; }
+    .product p { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 0; max-width: 30ch; }
+    .product-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 20px; }
+    .price { font-size: 16px; font-weight: 600; color: var(--paper); }
+    .add { width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 50%; color: var(--paper); background: transparent; font-size: 20px; line-height: 1; }
+    .add:hover { background: var(--accent); border-color: var(--accent); }
+
+    .footer { border-top: 1px solid var(--line); padding: 24px 0 40px; color: var(--muted); font-size: 11px; display: flex; justify-content: space-between; gap: 20px; }
+    .footer strong { color: var(--paper); font-weight: 500; }
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: var(--paper); color: var(--ink); padding: 12px 18px; font-size: 12px; box-shadow: var(--shadow); transition: .25s ease; }
+    .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 28px, 560px); }
+      .topbar { padding-top: 18px; }
+      .location { display: none; }
+      .hero { grid-template-columns: 1fr; gap: 38px; padding: 58px 0 54px; }
+      .qr-card { justify-self: start; width: 260px; }
+      .products { grid-template-columns: 1fr 1fr; }
+      .product-image { height: 145px; }
+      .product-info { padding: 14px; }
+      .product h3 { font-size: 19px; }
+      .menu-heading { align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 460px) {
+      .mini-brand img { width: 110px; }
+      .top-action { padding: 8px 11px; }
+      .products { grid-template-columns: 1fr; }
+      .product-image { height: 180px; }
+      .footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="mini-brand" href="#menu" aria-label="Noma menüye git">
+      <img src="assets/logpng.png" alt="Noma Coffee and More" />
+    </a>
+    <span class="location">Kadıköy · İstanbul</span>
+    <button class="top-action" id="scanButton">QR menüyü aç</button>
+  </header>
+
+  <main>
+    <section class="shell hero">
+      <div>
+        <p class="eyebrow">Coffee and more</p>
+        <h1>Günün ritmine iyi gelen şeyler.</h1>
+        <p class="hero-copy">Taze demlenen kahveler, uzun sohbetlere eşlik eden tatlar ve acele etmeden seçebileceğin bir menü.</p>
+        <div class="hero-note">Demo menü · ürünler ve fiyatlar örnektir</div>
+      </div>
+
+      <div class="qr-card" aria-label="Logo ile bütünleşik QR menü kartı">
+        <div class="qr-inner">
+          <div class="qr-code" id="qrCode" aria-label="Noma demo menüsünü açan QR kod">
+            <img class="qr-logo" src="assets/logpng.png" alt="" />
+          </div>
+          <div class="qr-label">Menüyü keşfet</div>
+          <p class="qr-sub">Telefon kameranla okut</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell menu-wrap" id="menu">
+      <div class="menu-heading">
+        <h2>Bugün ne içelim?</h2>
+        <p>Seç, masanda buluşsun.</p>
+      </div>
+      <div class="filters" role="tablist" aria-label="Menü kategorileri">
+        <button class="filter active" data-filter="all">Tümü</button>
+        <button class="filter" data-filter="kahve">Kahveler</button>
+        <button class="filter" data-filter="soguk">Soğuklar</button>
+        <button class="filter" data-filter="tatli">Tatlılar</button>
+      </div>
+
+      <div class="products">
+        <article class="product" data-category="kahve">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=82" alt="Sıcak filtre kahve" loading="lazy"></div>
+          <div class="product-info"><div class="product-type">Kahveler</div><h3>Filtre Kahve</h3><p>Günün çekirdeğiyle sade, temiz ve dengeli.</p><div class="product-bottom"><span class="price">₺145</span><button class="add" aria-label="Filtre Kahveyi seç">+</button></div></div>
+        </article>
+        <article class="product" data-category="kahve">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=82" alt="Latte kahve" loading="lazy"></div>
+          <div class="product-info"><div class="product-type">Kahveler</div><h3>Latte</h3><p>İpeksi süt dokusu, yumuşak espresso bitişi.</p><div class="product-bottom"><span class="price">₺190</span><button class="add" aria-label="Latteyi seç">+</button></div></div>
+        </article>
+        <article class="product" data-category="soguk">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=82" alt="Buzlu kahve" loading="lazy"></div>
+          <div class="product-info"><div class="product-type">Soğuklar</div><h3>Iced Mocha</h3><p>Soğuk kahve, kakao ve süt; ferah bir klasik.</p><div class="product-bottom"><span class="price">₺220</span><button class="add" aria-label="Iced Mochayı seç">+</button></div></div>
+        </article>
+        <article class="product" data-category="soguk">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=82" alt="Soğuk köpüklü içecek" loading="lazy"></div>
+          <div class="product-info"><div class="product-type">Soğuklar</div><h3>Cold Brew</h3><p>Yavaş demlenmiş, uzun içimli ve berrak.</p><div class="product-bottom"><span class="price">₺205</span><button class="add" aria-label="Cold Brew seç">+</button></div></div>
+        </article>
+        <article class="product" data-category="tatli">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=82" alt="Çikolatalı pasta" loading="lazy"></div>
+          <div class="product-info"><div class="product-type">Tatlılar</div><h3>Çikolatalı Pasta</h3><p>Yoğun kakao, yumuşak krema ve ince bir dokunuş.</p><div class="product-bottom"><span class="price">₺240</span><button class="add" aria-label="Çikolatalı Pastayı seç">+</button></div></div>
+        </article>
+        <article class="product" data-category="tatli">
+          <div class="product-image"><img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=82" alt="Cheesecake" loading="lazy"></div>
+          <div class="product-info"><div class="product-type">Tatlılar</div><h3>Cheesecake</h3><p>İpeksi dokusu ve meyvemsi, hafif ekşi bitişiyle.</p><div class="product-bottom"><span class="price">₺225</span><button class="add" aria-label="Cheesecake seç">+</button></div></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell footer"><span><strong>Noma</strong> · coffee and more</span><span>Demo ürünler · fiyatlar örnektir</span></footer>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const demoMenuUrl = new URL('company/qr-menu.html', window.location.href).href;
+    new QRCode(document.getElementById('qrCode'), {
+      text: demoMenuUrl,
+      width: 220,
+      height: 220,
+      colorDark: '#111111',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+    const filters = document.querySelectorAll('.filter');
+    const products = document.querySelectorAll('.product');
+    const toast = document.getElementById('toast');
+    let toastTimer;
+    function showToast(message) {
+      toast.textContent = message; toast.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+    filters.forEach((button) => button.addEventListener('click', () => {
+      filters.forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+      const filter = button.dataset.filter;
+      products.forEach((product) => { product.hidden = filter !== 'all' && product.dataset.category !== filter; });
+    }));
+    document.querySelectorAll('.add').forEach((button) => button.addEventListener('click', () => {
+      showToast(`${button.closest('.product').querySelector('h3').textContent} seçildi`);
+    }));
+    document.getElementById('scanButton').addEventListener('click', () => {
+      window.location.href = 'company/qr-menu.html';
+    });
+  </script>
+</body>
+</html>
