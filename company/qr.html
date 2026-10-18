@@ -2,28 +2,30 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Noma — QR Menü</title>
+  <title>Noma — QR Kodu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
   <style>
-    :root{--ink:#0d0b09;--paper:#f3ece2;--muted:#b9a99b;--accent:#a97d61;--line:rgba(243,236,226,.16)}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 80% 10%,#2b1e17 0,#0d0b09 42%);color:var(--paper);font-family:"DM Sans",sans-serif;display:grid;place-items:center;padding:24px}.wrap{width:min(430px,100%);text-align:center}.brand{width:min(250px,75%);margin:0 auto 34px}.brand img{width:100%;display:block}.kicker{color:var(--accent);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 15px}.wrap h1{font:500 clamp(38px,10vw,58px)/.98 "Playfair Display",serif;letter-spacing:-.05em;margin:0 auto 18px;max-width:360px}.intro{color:var(--muted);font-size:14px;line-height:1.6;max-width:300px;margin:0 auto 30px}.qr-shell{background:var(--paper);padding:18px;width:270px;margin:0 auto 25px;box-shadow:0 26px 80px rgba(0,0,0,.35);transform:rotate(-1.5deg)}.qr-brand{height:52px;display:grid;place-items:center;padding:7px 12px 10px;border-bottom:1px solid rgba(13,11,9,.14);margin-bottom:14px}.qr-brand img{width:150px;max-width:100%;display:block}.qr-frame{background:#fff;padding:10px}.qr-frame #qrcode{position:relative;background:#fff}.qr-frame canvas,.qr-frame img{width:100%!important;height:100%!important;display:block}.scan{color:#5c493d;font-size:11px;margin:13px 0 0}.open{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:14px 24px;font-weight:600;font-size:13px;text-decoration:none;transition:.2s ease}.open:hover{background:#c0967c;transform:translateY(-2px)}.note{color:var(--muted);font-size:11px;margin:20px 0 0}.note span{color:var(--paper)}
+    :root{--ink:#141517;--coffee:#a97d61;--coffee-dark:#765543;--paper:#fff;--line:#e9dce6;--muted:#6d6570}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#fff;color:var(--ink);font-family:"DM Sans",sans-serif;display:grid;place-items:center;padding:24px}.page{width:min(620px,100%);text-align:center}.logo{width:min(220px,62%);margin:0 auto 34px;display:block}.title{font-size:clamp(36px,7vw,58px);line-height:1;letter-spacing:-.055em;margin:0 0 24px;font-weight:700}.card{width:min(520px,100%);margin:auto;padding:34px 34px 24px;border:4px solid var(--line);border-radius:30px;background:#fff;box-shadow:0 12px 30px rgba(52,35,48,.08)}.qr-wrap{position:relative;background:#fff;padding:8px;border-radius:19px}.qr-wrap canvas{width:100%!important;height:auto!important;display:block;border-radius:14px}.qr-mark{position:absolute;left:50%;top:50%;width:88px;height:88px;transform:translate(-50%,-50%);border-radius:50%;background:var(--coffee);border:9px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.04);display:grid;place-items:center;overflow:hidden}.qr-mark::after{content:"N";font:700 49px/1 "Playfair Display",serif;color:#fff;transform:translateY(-2px)}.qr-caption{margin:24px 0 0;color:var(--ink);font-size:16px;font-weight:700;letter-spacing:.12em}.code{display:inline-block;margin-top:12px;padding:8px 18px;border-radius:9px;background:#f6f8fb;color:#121725;font-size:19px;font-weight:700;letter-spacing:.18em}.actions{display:flex;justify-content:center;gap:12px;margin:24px 0 0}.button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:999px;padding:13px 20px;background:var(--coffee);color:#fff;font-size:13px;font-weight:700}.button.secondary{background:#fff;border:1px solid #dbc9bd;color:var(--coffee-dark)}.button:hover{filter:brightness(1.07)}.note{color:var(--muted);font-size:12px;margin:22px 0 0}@media(max-width:500px){body{padding:16px}.card{padding:22px 16px 18px;border-width:3px;border-radius:24px}.qr-mark{width:68px;height:68px;border-width:7px}.qr-mark::after{font-size:38px}.actions{flex-direction:column}.button{width:100%}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <div class="brand"><img src="logpng.png" alt="Noma Coffee and More"></div>
-    <p class="kicker">Noma coffee and more</p>
-    <h1>Menüye hoş geldin.</h1>
-    <p class="intro">Kameranı QR koduna tut. Kahveni, soğuk içeceğini ya da tatlı eşlikçini seç.</p>
-    <div class="qr-shell"><div class="qr-brand"><img src="logpng.png" alt="Noma Coffee and More"></div><div class="qr-frame"><div id="qrcode" aria-label="Noma menüsünü açan QR kod"></div><p class="scan">Telefon kameranla okut</p></div></div>
-    <a class="open" href="qr-menu.html">Menüyü şimdi aç</a>
-    <p class="note">Demo menü · <span>fiyatlar örnektir</span></p>
+  <main class="page">
+    <img class="logo" src="logpng.png" alt="Noma Coffee and More">
+    <h1 class="title">QR Kodu</h1>
+    <section class="card" aria-label="Noma menü QR kodu">
+      <div class="qr-wrap"><div id="qrcode"></div><span class="qr-mark" aria-hidden="true"></span></div>
+      <div class="qr-caption">KAMERANLA OKUT</div>
+      <div class="code">NOMA24</div>
+      <div class="actions"><a class="button" href="qr-menu.html">Menüyü aç</a><a class="button secondary" href="qr-menu.html">Demo menü</a></div>
+    </section>
+    <p class="note">Noma coffee and more · Demo QR menü</p>
   </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    const menuUrl = new URL('qr-menu.html', window.location.href).href;
-    new QRCode(document.getElementById('qrcode'), {text:menuUrl,width:210,height:210,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+    const menuUrl=new URL('qr-menu.html',window.location.href).href;
+    new QRCode(document.getElementById('qrcode'),{text:menuUrl,width:560,height:560,colorDark:'#141517',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
   </script>
 </body>
 </html>
