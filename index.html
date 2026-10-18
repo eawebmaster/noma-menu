@@ -64,8 +64,10 @@
       border: 1px solid var(--line); box-shadow: var(--shadow); transform: rotate(2deg);
     }
     .qr-inner { padding: 18px; background: var(--paper); color: var(--ink); text-align: center; }
+    .qr-brand { height: 50px; display: grid; place-items: center; padding: 6px 10px 9px; border-bottom: 1px solid rgba(12, 11, 10, .15); margin-bottom: 14px; }
+    .qr-brand img { width: 145px; max-width: 100%; display: block; }
     .qr-code { position: relative; display: grid; place-items: center; aspect-ratio: 1; padding: 10px; background: #fff; overflow: hidden; }
-    .qr-code canvas, .qr-code img:not(.qr-logo) { width: 100% !important; height: 100% !important; display: block; }
+    .qr-code canvas, .qr-code img { width: 100% !important; height: 100% !important; display: block; }
     .qr-logo { position: absolute; width: 28%; height: 28%; object-fit: contain; inset: 36%; background: var(--paper); padding: 6px; z-index: 2; }
     .qr-label { margin: 16px 0 4px; font-family: "Playfair Display", Georgia, serif; font-size: 22px; }
     .qr-sub { margin: 0; font-size: 11px; color: #78675c; }
@@ -145,9 +147,8 @@
 
       <div class="qr-card" aria-label="Logo ile bütünleşik QR menü kartı">
         <div class="qr-inner">
-          <div class="qr-code" id="qrCode" aria-label="Noma demo menüsünü açan QR kod">
-            <img class="qr-logo" src="assets/logpng.png" alt="" />
-          </div>
+          <div class="qr-brand"><img src="assets/logpng.png" alt="Noma Coffee and More" /></div>
+          <div class="qr-code" id="qrCode" aria-label="Noma demo menüsünü açan QR kod"></div>
           <div class="qr-label">Menüyü keşfet</div>
           <p class="qr-sub">Telefon kameranla okut</p>
         </div>
