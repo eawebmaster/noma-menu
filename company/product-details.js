@@ -20,8 +20,11 @@
   dialog.className = 'product-dialog';
   dialog.setAttribute('aria-labelledby', 'detail-title');
   dialog.innerHTML = `
-    <button class="detail-close" type="button" aria-label="Ürün detayını kapat">×</button>
-    <div class="detail-layout">
+    <div class="sheet-header">
+      <span class="sheet-handle" aria-hidden="true"></span>
+      <button class="detail-close" type="button" aria-label="Ürün detayını kapat">×</button>
+    </div>
+    <div class="detail-scroll">
       <img class="detail-photo" alt="">
       <div class="detail-content">
         <p class="detail-category"></p>
@@ -33,19 +36,38 @@
           <h3>Alerjen bilgisi · örnek reçete</h3><p class="allergens-text"></p>
           <p class="demo-info">Bu bilgiler demo içindir. Gerçek içerik, alerjenler ve çapraz temas bilgisi için sipariş öncesi personele danışınız. Süt tercihi diğer alerjenleri ortadan kaldırmaz.</p>
         </section>
+      </div>
+    </div>
         <div class="detail-footer">
           <div class="detail-total"><span>Seçiminin fiyatı</span><output class="detail-price" aria-live="polite"></output></div>
           <p class="detail-summary"></p>
           <button class="detail-save" type="button">Seçimi kaydet</button>
           <p class="detail-demo">Demo seçimidir; sipariş veya ödeme oluşturmaz. Fiyatlar örnektir.</p>
-        </div>
-      </div>
-    </div>`;
+        </div>`;
   document.body.append(dialog);
   const find = selector => dialog.querySelector(selector);
   const form = find('form');
   let product;
   let returnFocus;
+  let closing = false;
+  let dragStart = null;
+  let dragOffset = 0;
+
+  async function closeSheet() {
+    if (closing || !dialog.open) return;
+    closing = true;
+    let animation;
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      animation = dialog.animate([
+        { transform: `translateY(${dragOffset}px)` },
+        { transform: 'translateY(100%)' }
+      ], { duration: 180, easing: 'ease-in', fill: 'forwards' });
+      try { await animation.finished; } catch { /* Closing can interrupt the animation. */ }
+    }
+    dialog.close();
+    animation?.cancel();
+    closing = false;
+  }
 
   function radioGroup(title, name, options) {
     return `<fieldset><legend>${title}</legend><div class="choice-group">${options.map((option, i) => `<label class="detail-choice"><input type="radio" name="${name}" value="${i}" data-price="${option.price || 0}" data-label="${option.label}" ${i === 0 ? 'checked' : ''}><span class="choice-label">${option.label}${option.note ? `<small>${option.note}</small>` : ''}</span></label>`).join('')}</div></fieldset>`;
@@ -59,6 +81,7 @@
   }
 
   function open(card, trigger) {
+    if (dialog.open || closing) return;
     const name = card.querySelector('h2').textContent;
     product = { name, base: Number(card.querySelector('.price').textContent.replace(/[^\d]/g, '')), recipe: recipes[name] };
     const recipe = product.recipe;
@@ -93,25 +116,50 @@
     document.body.classList.add('details-open');
     dialog.showModal();
     find('#detail-title').focus({preventScroll:true});
-    dialog.scrollTop = 0;
+    find('.detail-scroll').scrollTop = 0;
   }
 
   form.addEventListener('change', update);
   form.addEventListener('submit', event => event.preventDefault());
-  find('.detail-close').addEventListener('click', () => dialog.close());
+  find('.detail-close').addEventListener('click', closeSheet);
+  dialog.addEventListener('cancel', event => { event.preventDefault(); closeSheet(); });
   dialog.addEventListener('click', event => {
     const rect = dialog.getBoundingClientRect();
-    if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) dialog.close();
+    if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) closeSheet();
   });
   dialog.addEventListener('close', () => {
     document.body.classList.remove('details-open');
+    dialog.style.transform = '';
+    dragStart = null;
+    dragOffset = 0;
     returnFocus?.focus({preventScroll:true});
   });
-  find('.detail-save').addEventListener('click', () => {
+  find('.detail-save').addEventListener('click', async () => {
     const message = `${product.name} · ${find('.detail-price').value} · demo seçimi kaydedildi`;
-    dialog.close();
+    await closeSheet();
     notify(message);
   });
+  const handle = find('.sheet-header');
+  handle.addEventListener('pointerdown', event => {
+    if (event.target.closest('button') || event.button !== 0 || closing) return;
+    dragStart = event.clientY;
+    dragOffset = 0;
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener('pointermove', event => {
+    if (dragStart === null || closing) return;
+    dragOffset = Math.max(0, event.clientY - dragStart);
+    dialog.style.transform = `translateY(${dragOffset}px)`;
+  });
+  function endDrag(event) {
+    if (dragStart === null) return;
+    dragStart = null;
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    if (event.type !== 'pointercancel' && dragOffset > 90) closeSheet();
+    else { dialog.style.transform = ''; dragOffset = 0; }
+  }
+  handle.addEventListener('pointerup', endDrag);
+  handle.addEventListener('pointercancel', endDrag);
   document.querySelectorAll('.product').forEach(card => {
     const heading = card.querySelector('h2');
     const title = document.createElement('button');
